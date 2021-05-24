@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SimpleMenu : MonoBehaviour
+namespace cyraxchel.trainer.menu
 {
-    public void LoadLevel(int indx)
+    public class SimpleMenu : MonoBehaviour
     {
-        SceneManager.LoadScene(indx);
+        public void LoadLevel(int indx)
+        {
+            SceneManager.LoadScene(indx);
+        }
     }
 }

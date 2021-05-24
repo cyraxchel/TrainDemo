@@ -3,53 +3,60 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using cakeslice;
+using cyraxchel.trainer.config;
 
-public class HighlightElement : MonoBehaviour
+namespace cyraxchel.trainer.controllers
 {
-    bool isSelected = false;
-    Outline outline;
-
-    // Start is called before the first frame update
-    void Awake()
+    public class HighlightElement : MonoBehaviour
     {
-        outline = gameObject.AddComponent<Outline>();
-        DisableStepState();
-        TrainSteps.TrainConfigurationComplete += Subscribelisteners;
-    }
+        bool isSelected = false;
+        Outline outline;
 
-    private void Subscribelisteners(TrainModel model)
-    {
-        model.StepChanged += OnStepChnaged;
-    }
-
-    private void OnStepChnaged(Step currentstep)
-    {
-        if (currentstep.Go == gameObject) {
-            //do action
-            EnableStepState();
-            isSelected = true;
-        } else if (isSelected) {
+        // Start is called before the first frame update
+        void Awake()
+        {
+            outline = gameObject.AddComponent<Outline>();
             DisableStepState();
-            isSelected = false;
+            TrainSteps.TrainConfigurationComplete += Subscribelisteners;
         }
-    }
 
-    private void EnableStepState()
-    {
-        outline.eraseRenderer = false;
-        outline.enabled = true;
-    }
+        private void Subscribelisteners(TrainModel model)
+        {
+            model.StepChanged += OnStepChnaged;
+        }
 
-    private void DisableStepState()
-    {
-        outline.eraseRenderer = true;
-        outline.enabled = false;
+        private void OnStepChnaged(Step currentstep)
+        {
+            if (currentstep.Go == gameObject)
+            {
+                //do action
+                EnableStepState();
+                isSelected = true;
+            }
+            else if (isSelected)
+            {
+                DisableStepState();
+                isSelected = false;
+            }
+        }
 
-    }
+        private void EnableStepState()
+        {
+            outline.eraseRenderer = false;
+            outline.enabled = true;
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void DisableStepState()
+        {
+            outline.eraseRenderer = true;
+            outline.enabled = false;
+
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
     }
 }
