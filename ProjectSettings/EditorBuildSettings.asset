@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Trainer1.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Trainer2.unity
+    guid: 80b272e4924ec2e4bb42dd7a5759cfe2
   m_configObjects: {}
