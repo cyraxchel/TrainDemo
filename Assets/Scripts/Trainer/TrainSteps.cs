@@ -32,6 +32,7 @@ public class TrainSteps : MonoBehaviour
     private void OnDestroy()
     {
         TrainModel.Instance = null;
+        TrainConfigurationComplete = delegate { };
     }
 
     private void Start()
@@ -39,6 +40,7 @@ public class TrainSteps : MonoBehaviour
         TrainConfigurationComplete?.Invoke(model);
         model.StartTrain();
     }
+
 
     private void InitElements()
     {
