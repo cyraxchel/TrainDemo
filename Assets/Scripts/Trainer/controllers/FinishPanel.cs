@@ -9,7 +9,7 @@ using cyraxchel.trainer.config;
 
 namespace cyraxchel.trainer.controllers
 {
-    public class FinishPanel : MonoBehaviour
+    public class FinishPanel : BaseElement
     {
 
         [SerializeField]
@@ -21,11 +21,12 @@ namespace cyraxchel.trainer.controllers
         TextMeshProUGUI timeText;
         [SerializeField]
         TextMeshProUGUI errorCountText;
+        [SerializeField]
+        TimeValue totalTime;
 
-
-        private void Awake()
+        protected override void OnAwake()
         {
-            TrainSteps.TrainConfigurationComplete += Subscribelisteners;
+            base.OnAwake();
             restartButton.onClick.AddListener(RestartAction);
             panelRool.SetActive(false);
             timeText.text = "";
@@ -33,27 +34,19 @@ namespace cyraxchel.trainer.controllers
             panelRool.SetActive(false);
         }
 
+        protected override void OnTrainingFinish(int numberOfErrors)
+        {
+            base.OnTrainingFinish(numberOfErrors);
+            errorCountText.text = numberOfErrors.ToString();
+            timeText.text = totalTime.TotalTimeText;
+            panelRool.SetActive(true);
+        }
+
+
         private void RestartAction()
         {
             SceneManager.LoadScene(0);
         }
 
-
-        private void Subscribelisteners(TrainModel model)
-        {
-            model.TrainFinished += ShowStatistics;
-        }
-
-        private void ShowStatistics(int numErrors)
-        {
-
-            errorCountText.text = numErrors.ToString();
-            panelRool.SetActive(true);
-        }
-
-        public void SetTotalTimeText(string totaltime)
-        {
-            timeText.text = totaltime;
-        }
     }
 }

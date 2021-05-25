@@ -9,7 +9,7 @@ using cyraxchel.trainer.config;
 
 namespace cyraxchel.trainer.controllers
 {
-    public class ErrorPanel : MonoBehaviour
+    public class ErrorPanel : BaseElement
     {
         [SerializeField]
         GameObject panelRool;
@@ -18,13 +18,17 @@ namespace cyraxchel.trainer.controllers
         [SerializeField]
         Button restartButton;
 
-
-        private void Awake()
+        protected override void OnAwake()
         {
-            TrainSteps.TrainConfigurationComplete += Subscribelisteners;
             continueButton.onClick.AddListener(ContinueAction);
             restartButton.onClick.AddListener(RestartAction);
             panelRool.SetActive(false);
+        }
+
+        protected override void OnErrorAction(int numberOfErrors)
+        {
+            base.OnErrorAction(numberOfErrors);
+            panelRool.SetActive(true);
         }
 
         private void RestartAction()
@@ -37,16 +41,6 @@ namespace cyraxchel.trainer.controllers
             panelRool.SetActive(false);
         }
 
-
-        private void Subscribelisteners(TrainModel model)
-        {
-            model.ErrorAction += OnTrainError;
-        }
-
-        private void OnTrainError(int erorcounted)
-        {
-            panelRool.SetActive(true);
-        }
 
     }
 }

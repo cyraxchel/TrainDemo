@@ -9,7 +9,7 @@ using System;
 namespace cyraxchel.trainer.controllers
 {
 
-    public class StepInfo : MonoBehaviour
+    public class StepInfo : BaseElement
     {
         [SerializeField]
         TextMeshProUGUI infoField;
@@ -17,26 +17,22 @@ namespace cyraxchel.trainer.controllers
         GameObject rootPanel;
 
         // Start is called before the first frame update
-        void Awake()
+        protected override void OnAwake()
         {
-            TrainSteps.TrainConfigurationComplete += Subscribelisteners;
+            base.OnAwake();
             infoField.text = "";
         }
 
-        private void Subscribelisteners(TrainModel model)
+        protected override void OnStepChanged(Step currentStep)
         {
-            model.StepChanged += OnStepChanged;
-            model.TrainFinished += OnFinishTraining;
+            base.OnStepChanged(currentStep);
+            infoField.text = currentStep.Label;
         }
 
-        private void OnFinishTraining(int err)
+        protected override void OnTrainingFinish(int numberOfErrors)
         {
+            base.OnTrainingFinish(numberOfErrors);
             rootPanel.SetActive(false);
-        }
-
-        private void OnStepChanged(Step step)
-        {
-            infoField.text = step.Label;
         }
 
         

@@ -7,55 +7,24 @@ using cyraxchel.trainer.config;
 
 namespace cyraxchel.trainer.controllers
 {
-    public class TrainerTimer : MonoBehaviour
+    public class TrainerTimer : BaseElement
     {
-        public TimeReadyEvent TrainTimeReady;
 
         float trainerStartTime = 0;
         float trainerEndTime = 0;
-        public float TotalTime { get { return trainerEndTime - trainerStartTime; } }
-        public string TotalTimeFormat
-        {
-            get
-            {
-                TimeSpan ts = TimeSpan.FromSeconds(TotalTime);
-                return string.Format("{0:D2}h:{1:D2}m:{2:D2}s", ts.Hours, ts.Minutes, ts.Seconds);
-            }
-        }
-        // Start is called before the first frame update
-        void Awake()
-        {
-            TrainSteps.TrainConfigurationComplete += Subscribelisteners;
-        }
 
-        private void Subscribelisteners(TrainModel model)
+        public TimeValue TotalTimeInstance;
+
+        protected override void OnTrainingStart()
         {
-            model.TrainStart += FixStartTime;
-            model.TrainFinished += FixEndTime;
-        }
-
-        private void FixEndTime(int totaltime)
-        {
-            trainerEndTime = Time.timeSinceLevelLoad;
-
-            Debug.Log(trainerStartTime);
-            Debug.Log(trainerEndTime);
-
-            TrainTimeReady?.Invoke(TotalTimeFormat);
-        }
-
-        private void FixStartTime()
-        {
+            base.OnTrainingStart();
             trainerStartTime = Time.timeSinceLevelLoad;
         }
-
-        // Update is called once per frame
-        void Update()
+        protected override void OnTrainingFinish(int numberOfErrors)
         {
-
+            base.OnTrainingFinish(numberOfErrors);
+            trainerEndTime = Time.timeSinceLevelLoad;
+            TotalTimeInstance.TotalTime = trainerEndTime - trainerStartTime;
         }
-
-        [Serializable]
-        public class TimeReadyEvent : UnityEvent<string> { }
     }
 }

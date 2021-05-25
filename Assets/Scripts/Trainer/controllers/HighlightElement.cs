@@ -7,29 +7,33 @@ using cyraxchel.trainer.config;
 
 namespace cyraxchel.trainer.controllers
 {
-    public class HighlightElement : MonoBehaviour
+    public class HighlightElement : BaseElement
     {
         bool isSelected = false;
-        Outline outline;
+        List<Outline> outline;
 
-        // Start is called before the first frame update
-        void Awake()
+        protected override void OnAwake()
         {
-            outline = gameObject.AddComponent<Outline>();
+            base.OnAwake();
+            AddOutline();
             DisableStepState();
-            TrainSteps.TrainConfigurationComplete += Subscribelisteners;
         }
 
-        private void Subscribelisteners(TrainModel model)
+        private void AddOutline()
         {
-            model.StepChanged += OnStepChnaged;
-        }
-
-        private void OnStepChnaged(Step currentstep)
-        {
-            if (currentstep.Go == gameObject)
+            outline = new List<Outline>();
+            Renderer[] rnds = gameObject.GetComponentsInChildren<Renderer>();
+            foreach (var item in rnds)
             {
-                //do action
+                outline.Add(item.gameObject.AddComponent<Outline>());
+            }
+        }
+
+        protected override void OnStepChanged(Step currentStep)
+        {
+            base.OnStepChanged(currentStep);
+            if (currentStep.Go == gameObject)
+            {
                 EnableStepState();
                 isSelected = true;
             }
@@ -42,21 +46,13 @@ namespace cyraxchel.trainer.controllers
 
         private void EnableStepState()
         {
-            outline.eraseRenderer = false;
-            outline.enabled = true;
+            outline.ForEach(delegate (Outline item) { item.eraseRenderer = false; item.enabled = true; });
         }
 
         private void DisableStepState()
         {
-            outline.eraseRenderer = true;
-            outline.enabled = false;
-
+            outline.ForEach(delegate (Outline item) { item.eraseRenderer = true; item.enabled = false; });
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
     }
 }
